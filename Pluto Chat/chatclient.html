@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #console{
+            background-color: gray;
+            color: white;
+            height: 400px;
+            width: 700px;
+        }
+    </style>
+</head>
+<body>
+    <div id="console">
+
+    </div>
+    <input type="text" name="" value=""/>
+    <button id="send">Send message</button>
+    <script src="jquery.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <script>
+        function output(user,message){
+            $("#console").append("<span class='message'>"+user+":"+message+"</span><br/>");
+        }
+
+        var socket=io.connect("http://localhost:9092");
+        socket.on("connect",function(){
+            alert('connected');
+        });
+
+       $("#send").click(function(){
+        var userName="leab";
+        var message=$("input").eq(0).val();
+        socket.emit("chathelo", { "user": userName, "message": message });
+        output("MySelf",message);
+       });
+
+
+       socket.on("chathelo",function(data){
+            output(data.user,data.message);
+       });
+    </script>
+</body>
+</html>
